@@ -43,7 +43,7 @@ function GoToDefinition()
   call FollowJsReference()
   " Once inside the target file, find the token and center the screen around
   " it
-  exec 'normal /' . @t . 'zz'
+  exec 'normal /\<' . @t . '\>zz'
 endfunction
 nnoremap <F5> :call GoToDefinition()<CR>
 
