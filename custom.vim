@@ -54,6 +54,11 @@ nnoremap <LEADER>d :GitGrep -w 'debugger;' -- :/<CR>
 
 nnoremap <LEADER>a :ALEDetail<CR>
 
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+
 " Go to the first error in the current buffer
 nnoremap [; :ALEFirst<CR>
 
@@ -88,71 +93,6 @@ nnoremap <F9> :GitGrep -w 'TODO' -- :/ :!/lib '*.js'<CR>
 nnoremap <silent> <F9> :!adb shell input keyevent 82 && adb shell input keyevent 19 && adb shell input keyevent 23<CR><CR>
 nnoremap <silent> <F10> :!adb shell input keyevent 82<CR><CR>
 nnoremap <silent> <F11> :!adb reverse tcp:8081 tcp:8081<CR><CR>
-
-" Follow JavaScript references with proper babel (and module-resolver)
-" resolution (requires a git repo in the project's root)
-function FollowJsReference()
-  " Find the reference and yank it into the r register
-  exec "normal ^f'\"ryi'"
-  let s:filename = @r
-  if s:filename[0] == '.'
-    " Treat it as a relative reference
-    let s:file_with_js = expand('%:p:h') . s:filename[1:] . ".js"
-    let s:file_with_index_js = expand('%:p:h') . s:filename[1:] . "/index.js"
-    if filereadable(s:file_with_js)
-      exec ":edit " . s:file_with_js
-    elseif filereadable(s:file_with_index_js)
-      exec ":edit " . s:file_with_index_js
-    else
-      echo "Couldn't find reference"
-    endif
-  else
-    if g:projectname == 'hive-web'
-      let s:out = expand(substitute(s:filename, '\~', '~/js-projects/hive-web/src', ''))
-      let s:file_with_js = s:out . ".js"
-      let s:file_with_index_js = s:out . "/index.js"
-      if filereadable(s:file_with_js)
-        exec ":edit " . s:file_with_js
-      elseif filereadable(s:file_with_index_js)
-        exec ":edit " . s:file_with_index_js
-      else
-        echom s:file_with_js
-        echom s:file_with_index_js
-        echo "Couldn't find reference"
-      endif
-    elseif g:projectname == 'sparrow'
-      let s:out = expand(substitute(s:filename, '\~', '~/js-projects/sparrow/src', ''))
-      let s:file_with_js = s:out . ".js"
-      let s:file_with_index_js = s:out . "/index.js"
-      if filereadable(s:file_with_js)
-        exec ":edit " . s:file_with_js
-      elseif filereadable(s:file_with_index_js)
-        exec ":edit " . s:file_with_index_js
-      else
-        echom s:file_with_js
-        echom s:file_with_index_js
-        echo "Couldn't find reference"
-      endif
-    else
-      " If it's not one of my projects, default to using babel
-      " Create a file at the root with the code for babel-node to resolve the
-      " reference. Ideally, I'd do this with babel-node's eval, but it errors out.
-      " Instead, I create a script, evaluate it then delete it.
-      let s:script_content = 'console.log(require.resolve("' . @r . '"));'
-      let s:root_dir = systemlist('dirname $(. ~/vim/vimrc/scripts/find-ancestor.sh .babelrc)')[0]
-      let s:create_command = 'tee ' . s:root_dir . '/___resolve.js'
-      call system(s:create_command, s:script_content)
-      " Run babel-node from the root dir
-      let s:babel_command = 'cd  ' . s:root_dir . '&& NODE_ENV=development babel ./___resolve.js | node'
-      let s:out = system(s:babel_command)
-      exec ":edit " . s:out
-      " Clean up
-      let s:delete_command = 'rm ' . s:root_dir . '/___resolve.js'
-      call system(s:delete_command)
-    endif
-  endif
-endfunction
-nnoremap <LEADER>gj :call FollowJsReference()<CR>
 
 " fbsimctl helper mappings
 nnoremap <LEADER>ilb :r!fbsimctl list \| grep Booted<CR>ggdd
@@ -224,3 +164,17 @@ nnoremap <LEADER>ts gg/type State<CR>w
 nnoremap <LEADER>mr gg/render(<CR>w
 nnoremap <F1> :GitGrep 
 nnoremap <F2> :GitGrep -w 
+
+" javascript tricks
+augroup filetype_javascript
+  autocmd!
+  autocmd FileType javascript,javascript.jsx iabbrev rr return
+  autocmd FileType javascript,javascript.jsx iabbrev ff function
+  autocmd FileType javascript,javascript.jsx iabbrev cc const
+  autocmd FileType javascript,javascript.jsx iabbrev xx export
+  autocmd FileType javascript,javascript.jsx iabbrev xc export const
+  autocmd FileType javascript,javascript.jsx iabbrev xd export default
+  autocmd FileType javascript,javascript.jsx iabbrev ii import from '';<left><left><left><left><left><left><left><left><left>
+  autocmd FileType javascript,javascript.jsx iabbrev ni import { } from '';<left><left><left><left><left><left><left><left><left><left><left>
+  autocmd FileType javascript,javascript.jsx,json nnoremap <Leader>p :ALEFix<CR>
+augroup END
