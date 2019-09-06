@@ -76,6 +76,8 @@ let g:javascript_plugin_flow = 1
 Plug 'itchyny/lightline.vim'
 let g:rigel_lightline = 1
 let g:lightline = { 'colorscheme': 'rigel' }
+Plug 'sheerun/vim-polyglot'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 " Auto-close
 Plug 'spf13/vim-autoclose'
