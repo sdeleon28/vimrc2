@@ -1,6 +1,11 @@
 " Set leader
 let mapleader = "\<Space>"
 
+" Simple word refactoring shortcut. Hit <Leader>r<new word> on a word to
+" refactor it. Navigate to more matches with `n` and `N` and redo refactoring
+" by hitting the dot key.
+map <Leader>r *Nciw
+
 " Use relative numbers by default and always include current line number
 set rnu
 set nu
@@ -39,7 +44,18 @@ nnoremap <LEADER>i :!open <CFILE><CR><CR>
 
 " Swaps paste mode
 set pastetoggle=<F3>
-nnoremap <F5> :nohlsearch<CR>
+
+" Stop highlighting search
+nnoremap <LEADER>l :nohlsearch<CR>
+
+" Print current filename
+nnoremap <LEADER>n :echo expand('%')<CR>
+
+" Go to adjacent component
+nnoremap <LEADER>c :edit %:h/component.js<CR>
+
+" Save javascript reference to clipboard
+nnoremap <LEADER>% :silent !echo % \| sed 's/\/index\.js$//g' \| sed 's/\.js$//g' \| tail -1 \| pbcopy<CR>
 
 " Mix Vim and system clipboards
 set clipboard=unnamed
