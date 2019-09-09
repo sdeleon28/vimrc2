@@ -1,3 +1,9 @@
+function NormalizePath(path)
+  let s:simplified_path = simplify(a:path)
+  let s:current_dir = getcwd()
+  return substitute(s:simplified_path, s:current_dir . '/', '', '')
+endfunction
+
 function FollowJsReference()
   " Find the reference and yank it into the r register
   exec "normal ^f'\"ryi'"
@@ -8,9 +14,9 @@ function FollowJsReference()
     let s:file_with_js = expand('%:p:h') . '/' . s:filename . ".js"
     let s:file_with_index_js = expand('%:p:h') . '/' . s:filename . "/index.js"
     if filereadable(s:file_with_js)
-      exec ":edit " . s:file_with_js
+      exec ":edit " . NormalizePath(s:file_with_js)
     elseif filereadable(s:file_with_index_js)
-      exec ":edit " . s:file_with_index_js
+      exec ":edit " . NormalizePath(s:file_with_index_js)
     else
       echo "Couldn't find reference"
     endif
@@ -19,9 +25,9 @@ function FollowJsReference()
     let s:file_with_js = s:out . ".js"
     let s:file_with_index_js = s:out . "/index.js"
     if filereadable(s:file_with_js)
-      exec ":edit " . s:file_with_js
+      exec ":edit " . NormalizePath(s:file_with_js)
     elseif filereadable(s:file_with_index_js)
-      exec ":edit " . s:file_with_index_js
+      exec ":edit " . NormalizePath(s:file_with_index_js)
     else
       echom s:file_with_js
       echom s:file_with_index_js
@@ -31,7 +37,7 @@ function FollowJsReference()
     " Assume external library
     let s:command = 'node -e ''console.log(require.resolve("' . s:filename . '"));'''
     let s:out = system(s:command)
-    exec ":edit " . s:out
+    exec ":edit " . NormalizePath(s:out)
   endif
 endfunction
 nnoremap <LEADER>gj :call FollowJsReference()<CR>
