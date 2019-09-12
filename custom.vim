@@ -194,3 +194,13 @@ augroup filetype_javascript
   autocmd FileType javascript,javascript.jsx iabbrev ni import { } from '';<left><left><left><left><left><left><left><left><left><left><left>
   autocmd FileType javascript,javascript.jsx,json nnoremap <Leader>p :ALEFix<CR>
 augroup END
+
+inoremap {,<CR> {},<Esc>hi<CR><Esc>O
+inoremap {;<CR> {};<Esc>hi<CR><Esc>O
+inoremap {<CR> {}<Esc>i<CR><Esc>O
+inoremap [,<CR> [],<Esc>hi<CR><Esc>O
+inoremap [;<CR> [];<Esc>hi<CR><Esc>O
+inoremap [<CR> []<Esc>i<CR><Esc>O
+inoremap (,<CR> (),<Esc>hi<CR><Esc>O
+inoremap (;<CR> ();<Esc>hi<CR><Esc>O
+inoremap (<CR> ()<Esc>i<CR><Esc>O
