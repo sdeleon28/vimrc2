@@ -127,3 +127,6 @@ let g:localvimrc_ask = 0
 
 " ReasonML
 Plug 'reasonml-editor/vim-reason-plus'
+
+" Change variable casing and things
+Plug 'tpope/vim-abolish'
