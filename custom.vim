@@ -27,10 +27,23 @@ function ExploreCurrentFolder()
 endfunction
 nnoremap <LEADER>z :call ExploreCurrentFolder()<CR>
 
-" Use 2 spaces for indentation
-set ts=2
+"nnoremap <LEADER>c :edit %:h/component.js<CR>
+
+function OpenHeaderFile()
+  exec ":edit " . expand("%:r") . '.h'
+endfunction
+nnoremap <LEADER>h :call OpenHeaderFile()<CR>
+
+function OpenCppFile()
+  exec ":edit " . expand("%:r") . '.cpp'
+endfunction
+nnoremap <LEADER>c :call OpenCppFile()<CR>
+
+
+" Use 4 spaces for indentation
+set ts=4
 set et
-set sw=2
+set sw=4
 
 " Enable autoindent
 set autoindent
@@ -52,7 +65,7 @@ nnoremap <LEADER>l :nohlsearch<CR>
 nnoremap <LEADER>n :echo expand('%')<CR>
 
 " Go to adjacent component
-nnoremap <LEADER>c :edit %:h/component.js<CR>
+"nnoremap <LEADER>c :edit %:h/component.js<CR>
 
 " Save javascript reference to clipboard
 nnoremap <LEADER>% :silent !echo % \| sed 's/\/index\.js$//g' \| sed 's/\.js$//g' \| tail -1 \| pbcopy<CR>
@@ -79,7 +92,7 @@ endif
 nnoremap [; :ALEFirst<CR>
 
 " Open file history
-nnoremap <LEADER>h :Glog --follow<CR><CR><CR>:copen<CR><Paste>
+"nnoremap <LEADER>h :Glog --follow<CR><CR><CR>:copen<CR><Paste>
 
 " Configure smooth scrolling
 function SmoothScroll(up)
@@ -204,3 +217,12 @@ inoremap [<CR> []<Esc>i<CR><Esc>O
 inoremap (,<CR> (),<Esc>hi<CR><Esc>O
 inoremap (;<CR> ();<Esc>hi<CR><Esc>O
 inoremap (<CR> ()<Esc>i<CR><Esc>O
+
+nnoremap <LEADER>gh yiW:!open https://github.com/search?q=react-native-permissions/<c-r>*<CR><CR>
+
+" Run test for current file
+nnoremap <LEADER>rt :!tmux respawn-window -t :test -k && tmux send-keys -t :test "TZ='Europe/London' yarn test %" Enter && tmux select-window -t :test<CR><CR>
+nnoremap <LEADER>dt :!tmux respawn-window -t :test -k && tmux send-keys -t :test "dtest %" Enter && tmux select-window -t :test<CR><CR>
+
+" Insert timestamp
+nnoremap <LEADER>ts :r!date +\%Y-\%m-\%dT\%H:\%M:\%S.000Z<CR>
