@@ -56,7 +56,7 @@ onoremap a/ :<c-u>execute "normal! F/vf/"<CR>
 
 " Version control
 Plug 'tpope/vim-fugitive'
-nnoremap <LEADER>gs :aboveleft :20Gstatus<CR>
+nnoremap <LEADER>gs :aboveleft :10Gstatus<CR>
 set diffopt=vertical
 
 " Mappings por next/previous commands
