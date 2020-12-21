@@ -66,7 +66,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 
 " Python mode!
-Plug 'python-mode/python-mode'
+" Plug 'python-mode/python-mode'
 
 " Theme
 Plug 'Rigellute/rigel'
