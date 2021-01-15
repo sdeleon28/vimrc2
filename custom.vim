@@ -29,6 +29,9 @@ nnoremap <LEADER>z :call ExploreCurrentFolder()<CR>
 
 "nnoremap <LEADER>c :edit %:h/component.js<CR>
 
+map <C-A> :py3f ~/lib/clang/share/clang/clang-format.py<cr>
+imap <C-A> <c-o>:py3f ~/lib/clang/share/clang/clang-format.py<cr>
+
 function OpenHeaderFile()
   exec ":edit " . expand("%:r") . '.h'
 endfunction
